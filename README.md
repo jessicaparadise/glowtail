@@ -2,15 +2,11 @@
 
 **An AI-powered incident responder on AWS.** When something breaks, Glowtail catches the alarm, has Claude read the error logs, and emails you a plain-English summary of what went wrong and where to look first.
 
----
-
 ## Why Glowtail?
 
 When an app breaks at 3am, the first ten minutes are the same every time: find the alarm, dig through logs, figure out what actually happened. Glowtail does that part for you. It's the smoke alarm that also hands you the fire report.
 
 Glowtail grabs the tail of your logs and makes it glow in your inbox.
-
----
 
 ## How it works
 
@@ -33,8 +29,6 @@ flowchart LR
 
 If Claude is ever unavailable, Glowtail still sends the raw logs. The responder should never be the thing that breaks.
 
----
-
 ## Tech stack
 
 | Area | Tools |
@@ -48,8 +42,6 @@ If Claude is ever unavailable, Glowtail still sends the raw logs. The responder 
 | AI | Claude on Amazon Bedrock |
 | Security | Least-privilege IAM, log scrubbing before AI |
 
----
-
 ## Design decisions
 
 - **Terraform state lives in S3, not on a laptop.** One source of truth, versioned, locked so two runs can't collide.
@@ -59,19 +51,13 @@ If Claude is ever unavailable, Glowtail still sends the raw logs. The responder 
 - **Scrub before AI.** Logs can hold keys, tokens, and emails. Those get masked before anything is sent to Claude.
 - **Fail safe.** If the AI step fails, you still get the raw logs.
 
----
-
 ## Cost
 
 Glowtail is built to run for pennies. Everything is serverless and only runs when an alarm fires. The rough cost per incident (including the Claude call) will be listed here once measured.
 
----
-
 ## What I learned
 
 > Coming soon, after it's built.
-
----
 
 ## Author
 
