@@ -31,6 +31,35 @@ resource "aws_lambda_function" "responder" {
   handler          = "handler.handler"
   filename         = data.archive_file.responder.output_path
   source_code_hash = data.archive_file.responder.output_base64sha256
+  timeout          = 15
+
+  environment {
+    variables = {
+      TOPIC_ARN = aws_sns_topic.alerts.arn
+    }
+  }
 
   depends_on = [aws_cloudwatch_log_group.responder]
+}
+
+# Exactly what the responder needs: read the patient's logs, post to the mailbox
+data "aws_iam_policy_document" "responder_permissions" {
+  statement {
+    actions = ["logs:FilterLogEvents"]
+    resources = [
+      aws_cloudwatch_log_group.patient.arn,
+      "${aws_cloudwatch_log_group.patient.arn}:*",
+    ]
+  }
+
+  statement {
+    actions   = ["sns:Publish"]
+    resources = [aws_sns_topic.alerts.arn]
+  }
+}
+
+resource "aws_iam_role_policy" "responder" {
+  name   = "responder-permissions"
+  role   = aws_iam_role.responder.id
+  policy = data.aws_iam_policy_document.responder_permissions.json
 }
