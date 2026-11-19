@@ -105,8 +105,8 @@ data "aws_iam_policy_document" "github_trust" {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
       values = [
-        "repo:jessicaparadise/glowtail:ref:refs/heads/main",
-        "repo:jessicaparadise/glowtail:pull_request"
+        "repo:jessicaparadise@213542472/glowtail@1448658514:ref:refs/heads/main",
+        "repo:jessicaparadise@213542472/glowtail@1448658514:pull_request"
       ]
     }
   }
